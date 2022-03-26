@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <link
+        rel="stylesheet" 
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+        <link
+        rel="stylesheet"
+        href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+        crossorigin="anonymous"
+        />
+        <link rel="stylesheet" href="./assets/css/normalise.css"/>
+        <link rel="stylesheet" href="./assets/css/style.css" />
+        <title>Weather Pro</title>
+    </head>
+
+    <body>
+        <header class="header">
+            <h1>Weather Dashboard</h1>
+
+        </header>
+
+        <section class="container">
+            <div class="row">
+                <div class="col-12 col-md-3 p-3">
+                    <h2>Search For a City:</h2>
+                    <form id="search-form" class="mb-2">
+                        <input id="search-input" class="form-input w-100" type="text" placeholder="Sydney">
+                        <button class="btn btn-primary btn-block">Search</button>
+                    </form>
+                    <hr>
+                    <button class="btn btn-secondary btn-block">Brisbane</button>
+                    <button class="btn btn-secondary btn-block">Melbourne</button>
+                </div>
+
+                <div class="col-12 col-md P-3">
+                    <div class="row city-card">
+                        <h2>Atlanta</h2>
+                        <p class="card-text">Temp: 37</p>
+                        <p class="card-text">Wind: 37</p>
+                        <p class="card-text">Humidity: 37</p>
+                        <p class="card-text">UV Index: 37</p>
+                    </div>
+                    <h3>5 Day Forecast:</h3>
+                    <div class="row justify-content-around align-items-center justify-content-md-start">
+                        <div class="card" id="card1">
+                            <div class="card-body weather-card">
+                                <h5 class="card-title" id="date">26/3/2022</h5>
+                                <i>Icon</i>
+                                <p class="card-text" id="temp">Temp: 37</p>
+                                <p class="card-text" id="wind">Wind: 26 kph</p>
+                                <p class="card-text" id="hum">Humidity: 80%</p>
+                            </div>
+                        </div>
+                        <div class="card" id="card2">
+                            <div class="card-body weather-card">
+                                <h5 class="card-title" id="date">26/3/2022</h5>
+                                <i>Icon</i>
+                                <p class="card-text" id="temp">Temp: 37</p>
+                                <p class="card-text" id="wind">Wind: 26 kph</p>
+                                <p class="card-text" id="hum">Humidity: 80%</p>
+                            </div>
+                        </div>
+                        <div class="card" id="card3">
+                            <div class="card-body weather-card">
+                                <h5 class="card-title" id="date">26/3/2022</h5>
+                                <i>Icon</i>
+                                <p class="card-text" id="temp">Temp: 37</p>
+                                <p class="card-text" id="wind">Wind: 26 kph</p>
+                                <p class="card-text" id="hum">Humidity: 80%</p>
+                            </div>
+                        </div>
+                        <div class="card" id="card4">
+                            <div class="card-body weather-card">
+                                <h5 class="card-title" id="date">26/3/2022</h5>
+                                <i>Icon</i>
+                                <p class="card-text" id="temp">Temp: 37</p>
+                                <p class="card-text" id="wind">Wind: 26 kph</p>
+                                <p class="card-text" id="hum">Humidity: 80%</p>
+                            </div>
+                        </div>
+                        <div class="card" id="card5">
+                            <div class="card-body weather-card">
+                                <h5 class="card-title" id="date">26/3/2022</h5>
+                                <i>Icon</i>
+                                <p class="card-text" id="temp">Temp: 37</p>
+                                <p class="card-text" id="wind">Wind: 26 kph</p>
+                                <p class="card-text" id="hum">Humidity: 80%</p>
+                            </div>
+                        </div>             
+                    </div>
+                </div>
+            </div>
+
+    
+        </section>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+        <script src="./assets/js/script.js"></script>
+    </body>
+</html>

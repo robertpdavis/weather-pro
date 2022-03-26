@@ -1,0 +1,138 @@
+/* Root variables for colour scheme */
+:root {
+  --textarea-colour:#000000;
+  --textarea-border:black;
+  --Jumbo-colour: black;
+  --Jumbo-border: black;
+  --row-border:white;
+  --col-hour-bgcolour:#ffffff;
+  --col-hour-colour:#000000;
+  --col-hour-border:#000000;
+  --past-bgcolour:#d3d3d3;
+  --past-colour:white;
+  --present-bgcolour:#ff6961;
+  --present-colour:white;
+  --future-bgcolour:#77dd77;
+  --future-colour:white;
+  --button-colour:white;
+  --button-bgcolour:#06aed5;
+  --button-border:black;
+}
+
+/* Set base font size */
+html {
+  font-size: 62.5%;
+}
+
+/* Default font style and line spacing */
+body {
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1;
+}
+
+button {
+  margin-top:35%;
+}
+
+/* Textare styling for event entries */
+.textarea {
+  font-size: 1.5rem;
+  background: transparent;
+  border: none;
+  resize: none;
+  color: var(--textarea-colour);
+  border-left: 1px solid var(--textarea-border);
+  padding: 10px;
+}
+
+/* Ensure textarea remains transparent when focused */
+.textarea:focus {
+  background: transparent;
+}
+
+/* Hero styling */
+.jumbotron {
+  text-align: center;
+  background-color: transparent;
+  color: var(--Jumbo-colour);
+  border-radius: 0;
+  border-bottom: 10px solid var(--Jumbo-border);
+}
+
+/* Schedule row styling in addition to bootstrap */
+.row {
+  /* white-space: pre-wrap; */
+  height: 80px;
+  border-top: 1px solid var(--row-border);
+}
+
+/* Hour col styling in addition to bootstrap */
+.hour {
+  font-size: 1.5rem;
+  background-color: var(--col-hour-bgcolour);
+  color: var(--col-hour-colour);
+  border-top: 1px dashed var(--col-hour-border);
+  padding-top: 0.5rem;
+  padding-left: 0.5rem;
+  text-align: center;
+}
+
+/* Event entry styling for all past items */
+.past {
+  background-color: var(--past-bgcolour);
+  color: var(--past-colour);
+}
+
+/* Event entry styling for all present items */
+.present {
+  background-color: var(--present-bgcolour);
+  color: var(--present-colour);
+}
+
+/* Event entry styling for all future items */
+.future {
+  background-color: var(--future-bgcolour);
+  color: var(--future-colour);
+}
+
+/* Save button col styling in addition to bootstrap */
+.saveBtn {
+  font-size: 1.5rem;
+  text-align: center;
+  border-left: 1px solid var(--button-border);
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  background-color: var(--button-bgcolour);
+  color: var(--button-colour);
+  padding-left:0;
+ 
+}
+
+/* using a mobile-first approach, use `min-width` values going from narrow -> wide for a responsive design */
+@media screen and (min-width: 768px) {
+  .hour {
+    font-size: 1.8rem;
+  }
+
+  .textarea {
+    font-size: 1.8rem;
+  }
+
+  .saveBtn {
+    font-size: 1.8rem;
+  }
+
+  .saveBtn:hover {
+    font-size: 2rem;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .lead{
+    font-size: 1.5rem;
+  }
+}
+  
+/* media query for larger screens */
+@media screen and (min-width: 992px) {
+/* Same as 768px */
+}

@@ -1,0 +1,95 @@
+/* Weather Pro Style Sheet */
+
+/* Root variables for colour scheme */
+:root {
+    --body-background-col:#ffffff;
+    --header-background-left:#14abb2;
+    --header-background-right:#233eb6;
+    --header-colour: #ffffff;
+    --hr-colour:#a9a9a9;
+    --border-colour: #000000;
+    --wcard-bg-colour:#172b38;
+}
+
+html {
+    line-height: 1.5;
+}
+
+body {
+    background-color: var(--body-background-col);
+}
+
+header {
+    background: linear-gradient(to right,var(--header-background-left) 0%, var(--header-background-right) 100%);
+    min-height: 4rem;
+    text-align: center;
+    color:var(--header-colour);
+    vertical-align: middle;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: bolder;
+}
+
+h2 {
+    font-size: 2.0rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+    font-weight: bolder;
+}
+
+hr {
+    height: 0.2rem;
+    border-color: var(--hr-colour);
+    background-color: var(--hr-colour);
+}
+
+.row {
+    margin-top: 0.5rem;
+}
+
+.form-input {
+    padding: 0.3rem 0;
+    margin: 0.3rem 0;
+}
+.city-card {
+    display: block;
+    border-color: var(border-color);
+    border-style: solid;
+    border-width: 0.1rem;
+    border-radius: 0.4rem;
+    padding: 0.5rem;
+}
+
+.card {
+    min-width: 75%;
+    margin-right: 1rem;
+}
+.weather-card {
+    color:white;
+    border-color: var(border-color);
+    border-style: solid;
+    border-width: 0.1rem;
+    border-radius: 0.4rem;
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
+    background-color: rgb(23, 43, 56);
+}
+
+@media only screen and (min-width: 768px) {
+    .card {
+        min-width: auto;
+    }
+  }
