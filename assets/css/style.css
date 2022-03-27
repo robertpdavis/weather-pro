@@ -68,6 +68,10 @@ hr {
     background-color: var(--hr-colour);
 }
 
+span {
+    font-size: 1.5rem;
+}
+
 .row {
     margin-top: 0.5rem;
 }
@@ -94,13 +98,18 @@ hr {
     min-width: 75%;
     margin-right: 1rem;
 }
+
+.card-text {
+    font-weight: 600;
+}
+
 .weather-card {
     color:white;
     border-color: var(border-color);
     border-style: solid;
     border-width: 0.1rem;
     border-radius: 0.4rem;
-    padding: 0.5rem 2rem 0.5rem 0.5rem;
+    padding: 0.5rem 1.2rem 0.5rem 0.5rem;
     background-color: rgb(23, 43, 56);
 }
 
