@@ -93,6 +93,7 @@ function renderWeather(searchString, forecastData) {
     var wind;
     var humidity;
     var html="";
+    var weatherCard;
 
     //Remove any existing weather forecast cards
     weatherCards.empty();
@@ -104,11 +105,25 @@ function renderWeather(searchString, forecastData) {
         wind = forecastData["daily"][i]["wind_speed"];
         humidity =  forecastData["daily"][i]["humidity"];
 
-        html = html + '<div class="card" id="card' + i + '"><div class="card-body weather-card"><h6 class="card-title">' + date + '</h6>'
-        html = html + '<i>' + iconHTML + '</i>'
-        html = html + '<p class="card-text">Temp: ' + temp + '</p><p class="card-text">Wind: ' + wind + ' km/h</p><p class="card-text">Humidity: ' + humidity + '%</p></div></div>';
+        weatherCard = $("<div>").addClass("card").attr("id","card" + i);
+        cardBody = $("<div>").addClass("card-body weather-card");
+        cardTitle = $("<h6>").addClass("card-title").text(date);
+        cardIcon = $("<i>").html(iconHTML);
+        cardTemp = $("<p>").addClass("card-text").text("Temp: " + temp + "oC");
+        cardWind = $("<p>").addClass("card-text").text("Wind: " + temp + "km/h"),
+        cardHum = $("<p>").addClass("card-text").text("Humidity: " + temp + "%")
+
+        cardBody.append(cardTitle, cardIcon, cardTemp, cardWind, cardHum);
+        weatherCard.append(cardBody);
+        weatherCards.append(weatherCard);
+
+        console.log(weatherCard);
+
+        // html = html + '<div class="card" id="card' + i + '"><div class="card-body weather-card"><h6 class="card-title">' + date + '</h6>'
+        // html = html + '<i>' + iconHTML + '</i>'
+        // html = html + '<p class="card-text">Temp: ' + temp + '</p><p class="card-text">Wind: ' + wind + ' km/h</p><p class="card-text">Humidity: ' + humidity + '%</p></div></div>';
     }
-    weatherCards.html(html);
+    // weatherCards.html(html);
 }
 
 function renderCityList() {
