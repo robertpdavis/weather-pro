@@ -109,7 +109,7 @@ function renderWeather(searchString, forecastData) {
         cardBody = $("<div>").addClass("card-body weather-card");
         cardTitle = $("<h6>").addClass("card-title").text(date);
         cardIcon = $("<i>").html(iconHTML);
-        cardTemp = $("<p>").addClass("card-text").text("Temp: " + temp + "oC");
+        cardTemp = $("<p>").addClass("card-text").text("Temp: " + temp + "&#x2103;");
         cardWind = $("<p>").addClass("card-text").text("Wind: " + temp + "km/h"),
         cardHum = $("<p>").addClass("card-text").text("Humidity: " + temp + "%")
 
@@ -212,6 +212,17 @@ function init () {
     loadCity();
     //Render the saved list of cities buttons
     renderCityList();
+
+    $('#mobileMenuButton').on('mousedown touchstart',function(){
+        var userAgent = window.navigator.userAgent;
+        if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i)||  userAgent.match(/Android/i)) {
+     if ($('#mobileNavigation').css('display') == 'none') {
+        $('#mobileNavigation').css('display','block');
+     } else {
+        $('#mobileNavigation').css('display','none'); 
+     }
+   }
+  });
 }
 
 //Wait for page to load and then initiate
