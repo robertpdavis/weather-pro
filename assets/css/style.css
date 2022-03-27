@@ -19,6 +19,7 @@ body {
     background-color: var(--body-background-col);
 }
 
+/* Gradient for the header */
 header {
     background: linear-gradient(to right,var(--header-background-left) 0%, var(--header-background-right) 100%);
     min-height: 4rem;
@@ -83,6 +84,8 @@ span {
     padding: 0.3rem 0;
     margin: 0.3rem 0;
 }
+
+/* Selected city card styling */
 .city-card {
     display: block;
     border-color: var(border-color);
@@ -106,6 +109,7 @@ span {
     font-weight: 400;
 }
 
+/* Foreacast card styling */
 .weather-card {
     color:white;
     border-color: var(border-color);
@@ -116,7 +120,9 @@ span {
     background-color: rgb(23, 43, 56);
 }
 
+
 @media only screen and (min-width: 768px) {
+    /* Adjust the card width for larger screens */
     .card {
         min-width: auto;
     }

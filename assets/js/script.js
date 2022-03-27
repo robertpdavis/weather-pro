@@ -10,15 +10,14 @@ var weatherCards = $("#weather-cards");
 var cityList = $("#city-list");
 
 //Other Global vars
-var defaultCity = "Sydney";
-
+var defaultCity = "sydney";
 
 //Listeners
 formElement.on('click', 'button', handleFormClick);
 
 
 //Functions
-
+//Form button click handler
 function handleFormClick (event) {
     event.preventDefault();
     var optionValue = event.target.value;
@@ -37,29 +36,35 @@ function handleFormClick (event) {
 
         if (searchString != "" && searchString != null && typeof searchString === "string") {
             searchApi(toProperCase(searchString));
-            //Save city in searches
-            saveCity(searchString);
         }
     }
 }
 
+//API handler for openweather api - note default http changed to https
 function searchApi(searchString) {
     var queryURL;
+    var success = "";
+    //Call basic api response which also provides lat and lon for selected city
     queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + searchString + "&appid=" + APIKey;
     fetch(queryURL).then(function (response) {
         if (response.ok) {
             response.json().then(function (baseData) {
+                //If all good, call the one call API with filters to remove unused data. Metric units selected
                 queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + baseData["coord"]["lat"] + "&lon=" + baseData["coord"]["lon"] + "&exclude=minutely,hourly&units=metric&appid=" + APIKey;
                 fetch(queryURL).then(function (response) {
                     if (response.ok) {
                         response.json().then(function (forecastData) {
-
+                        
+                        //Render the weather details for selected city
                         renderWeather(searchString, forecastData);
-
+                        //Save city in searches
+                        saveCity(searchString);
+                        //Render saved city list
                         renderCityList();
 
                         });
                     }else{
+                        //Capture API error and alert user
                         alert("OpenWeather API error: " + response.statusText);
                         console.log(response);
                         return;
@@ -67,6 +72,7 @@ function searchApi(searchString) {
                 });
             });
         }else{
+            //Capture API error and alert user
             alert("OpenWeather API error: " + response.statusText);
             console.log(response);
             return;
@@ -75,7 +81,6 @@ function searchApi(searchString) {
 }
 
 function renderWeather(searchString, forecastData) {
-    console.log(weatherCards);
 
     //Render city card
     var iconHTML = '<img src="https://openweathermap.org/img/wn/' + forecastData["current"]["weather"][0]["icon"] + '@2x.png" alt="Weather icon" height="50px" width="auto">';
@@ -86,15 +91,13 @@ function renderWeather(searchString, forecastData) {
     cityCard.children().eq(4).text("UV Index: " +forecastData["current"]["uvi"]);
 
     //Render 5 day forecast'
-    var date;
-    var temp;
-    var wind;
-    var humidity;
-    var weatherCard;
-
+    var date, iconHTML, temp, wind, humidity;
+    var weatherCard, cardBody, cardTitle, cardIcon, cardTemp, cardWind, cardHum;
+    
     //Remove any existing weather forecast cards
     weatherCards.empty();
 
+    //Create dynamic HTML
     for (var i = 1; i < 6; i++) {
         date = moment((forecastData["daily"][i]["dt"]*1000)).format("ddd Do MMMM");
         iconHTML = '<img src="https://openweathermap.org/img/wn/' + forecastData["daily"][i]["weather"][0]["icon"] + '@2x.png" alt="Weather icon" height="40px" width="auto">';
@@ -114,8 +117,11 @@ function renderWeather(searchString, forecastData) {
         weatherCard.append(cardBody);
         weatherCards.append(weatherCard);
     }
+
+    return true;
 }
 
+//Render city list on aside
 function renderCityList() {
     var savedCities = JSON.parse(localStorage.getItem("weatherpro"));
     var btnElement;
@@ -132,8 +138,11 @@ function renderCityList() {
         btnElement.text("Clear List");
         cityList.append(btnElement);
     }
+
+    return true;
 }
 
+//Save city to local storage. Don't save if no current storage and city is default city
 function saveCity(city) {
 
     var savedCities = JSON.parse(localStorage.getItem("weatherpro"));
@@ -141,11 +150,14 @@ function saveCity(city) {
     if (city != "" || city != undefined) {
 
         city = city.toLowerCase();
+        // console.log(city);
 
         //Check if any stored cities. If not initialise object first.
         if (savedCities === null) {
             var savedCities = {};
-            savedCities[city] = "last";
+            if (city != defaultCity.toLowerCase()){
+                savedCities[city] = "last";
+            }
         } else {
             savedCities[city] = "last";
         }
@@ -159,8 +171,11 @@ function saveCity(city) {
         // set new entry to local storage 
         localStorage.setItem("weatherpro", JSON.stringify(savedCities));
     }
+
+    return true;
 }
 
+//Function to load last or default city when opening app
 function loadCity(city) {
     var savedCities = JSON.parse(localStorage.getItem("weatherpro"));
 
@@ -179,14 +194,19 @@ function loadCity(city) {
     }
     city = toProperCase(city);
     searchApi(city);
+
+    return true;
 }
 
+//Clear local storage
 function clearCities() {
 
     if(confirm("Are you sure you wish to clear the list?")) {
         localStorage.removeItem("weatherpro");
         renderCityList();
     }
+
+    return true;
 }
 
 //Helpers
