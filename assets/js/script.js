@@ -36,7 +36,7 @@ function handleFormClick (event) {
         }
 
         if (searchString != "" && searchString != null && typeof searchString === "string") {
-
+            alert("Button worked: " + searchString );
             searchApi(toProperCase(searchString));
             //Save city in searches
             saveCity(searchString);
@@ -46,7 +46,7 @@ function handleFormClick (event) {
 
 function searchApi(searchString) {
     var queryURL;
-    
+    alert("Search API");
     queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + searchString + "&appid=" + APIKey;
     fetch(queryURL).then(function (response) {
         if (response.ok) {
@@ -82,7 +82,7 @@ function renderWeather(searchString, forecastData) {
     //Render city card
     var iconHTML = '<img src="http://openweathermap.org/img/wn/' + forecastData["current"]["weather"][0]["icon"] + '@2x.png" alt="Weather icon" height="50px" width="auto">';
     cityCard.children().eq(0).html(searchString + " <span>" + moment((forecastData["current"]["dt"]*1000)).format("ddd Do MMM YYYY") + "</span> " +  iconHTML); 
-    cityCard.children().eq(1).text("Temp: " + forecastData["current"]["temp"]);
+    cityCard.children().eq(1).html("Temp: " + forecastData["current"]["temp"] + "&#x2103;");
     cityCard.children().eq(2).text("Wind: " + forecastData["current"]["wind_speed"] + " km/h");
     cityCard.children().eq(3).text("Humidty: " + forecastData["current"]["humidity"] + " %");
     cityCard.children().eq(4).text("UV Index: " +forecastData["current"]["uvi"]);
@@ -92,7 +92,6 @@ function renderWeather(searchString, forecastData) {
     var temp;
     var wind;
     var humidity;
-    var html="";
     var weatherCard;
 
     //Remove any existing weather forecast cards
@@ -109,21 +108,16 @@ function renderWeather(searchString, forecastData) {
         cardBody = $("<div>").addClass("card-body weather-card");
         cardTitle = $("<h6>").addClass("card-title").text(date);
         cardIcon = $("<i>").html(iconHTML);
-        cardTemp = $("<p>").addClass("card-text").text("Temp: " + temp + "&#x2103;");
-        cardWind = $("<p>").addClass("card-text").text("Wind: " + temp + "km/h"),
-        cardHum = $("<p>").addClass("card-text").text("Humidity: " + temp + "%")
+        cardTemp = $("<p>").addClass("card-text").html("Temp: " + temp + "&#x2103;");
+        cardWind = $("<p>").addClass("card-text").text("Wind: " + wind + "km/h"),
+        cardHum = $("<p>").addClass("card-text").text("Humidity: " + humidity + "%")
 
         cardBody.append(cardTitle, cardIcon, cardTemp, cardWind, cardHum);
         weatherCard.append(cardBody);
         weatherCards.append(weatherCard);
 
         console.log(weatherCard);
-
-        // html = html + '<div class="card" id="card' + i + '"><div class="card-body weather-card"><h6 class="card-title">' + date + '</h6>'
-        // html = html + '<i>' + iconHTML + '</i>'
-        // html = html + '<p class="card-text">Temp: ' + temp + '</p><p class="card-text">Wind: ' + wind + ' km/h</p><p class="card-text">Humidity: ' + humidity + '%</p></div></div>';
     }
-    // weatherCards.html(html);
 }
 
 function renderCityList() {
