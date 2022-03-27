@@ -7,8 +7,9 @@ var APIKey = "5568aa3a7ef92d2e50a1823b6bba8d0d";
 var formElement = $("#search-form");
 var cityCard = $("#city-card");
 var weatherCards = $("#weather-cards");
+var cityList = $("#city-list");
 
-//Other Globa
+//Other Global vars
 var defaultCity = "Sydney";
 
 
@@ -28,12 +29,19 @@ function handleFormClick (event) {
         if (optionValue === "search") {          
             searchString = formElement[0][0].value;
        
+        } else if (optionValue === "clear") {
+            clearCities();
         } else {
             searchString = optionValue;
         }
 
         if (searchString != "" && searchString != null && typeof searchString === "string") {
+
+
+            searchString = toProperCase(searchString);
             searchApi(searchString);
+            //Save city in searches
+            saveCity(searchString);
         }
     }
 }
@@ -52,18 +60,19 @@ function searchApi(searchString) {
 
                         renderWeather(searchString, forecastData);
 
-                        //Save city in searches
-                        saveCity();
+                        renderCityList();
 
                         });
                     }else{
-                        alert("OpenWeather API error");
+                        alert("OpenWeather API error: " + response.statusText);
+                        console.log(response);
                         return;
                     }
                 });
             });
         }else{
-            alert("OpenWeather API error");
+            alert("OpenWeather API error: " + response.statusText);
+            console.log(response);
             return;
         }
     });
@@ -74,11 +83,11 @@ function renderWeather(searchString, forecastData) {
 
     //Render city card
     var iconHTML = '<img src="http://openweathermap.org/img/wn/' + forecastData["current"]["weather"][0]["icon"] + '@2x.png" alt="Weather icon" height="50px" width="auto">';
-    cityCard.children()[0].innerHTML = searchString + " <span>" + moment((forecastData["current"]["dt"]*1000)).format("ddd Do MMM YYYY") + "</span> " +  iconHTML; 
-    cityCard.children()[1].textContent = "Temp: " + forecastData["current"]["temp"];
-    cityCard.children()[2].textContent = "Wind: " + forecastData["current"]["wind_speed"] + " kPH";
-    cityCard.children()[3].textContent = "Humidty: " + forecastData["current"]["humidity"] + " %";
-    cityCard.children()[4].textContent = "UV Index: " +forecastData["current"]["uvi"];
+    cityCard.children().eq(0).html(searchString + " <span>" + moment((forecastData["current"]["dt"]*1000)).format("ddd Do MMM YYYY") + "</span> " +  iconHTML); 
+    cityCard.children().eq(1).text("Temp: " + forecastData["current"]["temp"]);
+    cityCard.children().eq(2).text("Wind: " + forecastData["current"]["wind_speed"] + " km/h");
+    cityCard.children().eq(3).text("Humidty: " + forecastData["current"]["humidity"] + " %");
+    cityCard.children().eq(4).text("UV Index: " +forecastData["current"]["uvi"]);
 
     //Render 5 day forecast'
     var date;
@@ -99,45 +108,97 @@ function renderWeather(searchString, forecastData) {
 
         html = html + '<div class="card" id="card' + i + '"><div class="card-body weather-card"><h6 class="card-title">' + date + '</h6>'
         html = html + '<i>' + iconHTML + '</i>'
-        html = html + '<p class="card-text">Temp: ' + temp + '</p><p class="card-text">Wind: ' + wind + ' kph</p><p class="card-text">Humidity: ' + humidity + '%</p></div></div>';
+        html = html + '<p class="card-text">Temp: ' + temp + '</p><p class="card-text">Wind: ' + wind + ' km/h</p><p class="card-text">Humidity: ' + humidity + '%</p></div></div>';
     }
     weatherCards.html(html);
 }
 
 function renderCityList() {
-    
+    var savedCities = JSON.parse(localStorage.getItem("weatherpro"));
+    var btnElement;
+    cityList.empty();
+
+    if (savedCities != "" && savedCities != null && Object.keys(savedCities).length > 0) {
+        var keys = Object.keys(savedCities);
+        for (var i = keys.length-1; i >= 0; i--) {
+            btnElement = $("<button>").addClass("btn btn-secondary btn-block").attr("value",keys[i]);
+            btnElement.text(keys[i]);
+            cityList.append(btnElement);
+        }
+        btnElement = $("<button>").addClass("btn btn-warning btn-block").attr("value","clear");
+        btnElement.text("Clear List");
+        cityList.append(btnElement);
+    }
 }
 
-function saveCity() {
+function saveCity(city) {
 
+    var savedCities = JSON.parse(localStorage.getItem("weatherpro"));
 
+    if (city != "" || city != undefined) {
+
+        city = toProperCase(city);
+
+        //Check if any stored cities. If not initialise object first.
+        if (savedCities === null) {
+            var savedCities = {};
+            savedCities[city] = "last";
+        } else {
+            savedCities[city] = "last";
+        }
+
+        for (const key in savedCities) {
+            if (Object.hasOwnProperty.call(savedCities, key) && key != city) {
+                savedCities[key] = "";
+            }
+        }
+
+        // set new entry to local storage 
+        localStorage.setItem("weatherpro", JSON.stringify(savedCities));
+    }
 }
 
 function loadCity(city) {
-
     var savedCities = JSON.parse(localStorage.getItem("weatherpro"));
+
     if (city === "" || city === undefined) {
         if (savedCities != "" && savedCities != null && Object.keys(savedCities).length > 0) {
-            city = savedCities["last"];  
+            for (var key in savedCities) {
+                if (Object.hasOwnProperty.call(savedCities, key)) {
+                    if (savedCities[key] === "last"){
+                        city = key;
+                    }
+                }
+            }
         } else {
             city = defaultCity;
         }
     }
-
     searchApi(city);
+}
 
+function clearCities() {
+
+    localStorage.removeItem("weatherpro");
+    renderCityList();
+}
+
+//Helpers
+//Converts string text to proper case
+function toProperCase(str) {
+    return str.replace(/(?:^|\s)\w/g, function(match) {
+        return match.toUpperCase();
+    });
 }
 
 function init () {
-
     //Load weather for last city searched. If none, do default city.
     loadCity();
-
+    //Render the saved list of cities buttons
     renderCityList();
-
 }
 
-
+//Wait for page to load and then initiate
 $(function () {
     init()
 });
