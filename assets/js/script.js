@@ -36,7 +36,6 @@ function handleFormClick (event) {
         }
 
         if (searchString != "" && searchString != null && typeof searchString === "string") {
-            alert("Button worked: " + searchString );
             searchApi(toProperCase(searchString));
             //Save city in searches
             saveCity(searchString);
@@ -46,8 +45,7 @@ function handleFormClick (event) {
 
 function searchApi(searchString) {
     var queryURL;
-    alert("Search API");
-    queryURL = "http://api.openweathermap.org/data/2.5/weather?q=" + searchString + "&appid=" + APIKey;
+    queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + searchString + "&appid=" + APIKey;
     fetch(queryURL).then(function (response) {
         if (response.ok) {
             response.json().then(function (baseData) {
@@ -80,7 +78,7 @@ function renderWeather(searchString, forecastData) {
     console.log(weatherCards);
 
     //Render city card
-    var iconHTML = '<img src="http://openweathermap.org/img/wn/' + forecastData["current"]["weather"][0]["icon"] + '@2x.png" alt="Weather icon" height="50px" width="auto">';
+    var iconHTML = '<img src="https://openweathermap.org/img/wn/' + forecastData["current"]["weather"][0]["icon"] + '@2x.png" alt="Weather icon" height="50px" width="auto">';
     cityCard.children().eq(0).html(searchString + " <span>" + moment((forecastData["current"]["dt"]*1000)).format("ddd Do MMM YYYY") + "</span> " +  iconHTML); 
     cityCard.children().eq(1).html("Temp: " + forecastData["current"]["temp"] + "&#x2103;");
     cityCard.children().eq(2).text("Wind: " + forecastData["current"]["wind_speed"] + " km/h");
@@ -99,7 +97,7 @@ function renderWeather(searchString, forecastData) {
 
     for (var i = 1; i < 6; i++) {
         date = moment((forecastData["daily"][i]["dt"]*1000)).format("ddd Do MMMM");
-        iconHTML = '<img src="http://openweathermap.org/img/wn/' + forecastData["daily"][i]["weather"][0]["icon"] + '@2x.png" alt="Weather icon" height="40px" width="auto">';
+        iconHTML = '<img src="https://openweathermap.org/img/wn/' + forecastData["daily"][i]["weather"][0]["icon"] + '@2x.png" alt="Weather icon" height="40px" width="auto">';
         temp = forecastData["daily"][i]["temp"]["day"];
         wind = forecastData["daily"][i]["wind_speed"];
         humidity =  forecastData["daily"][i]["humidity"];
@@ -115,8 +113,6 @@ function renderWeather(searchString, forecastData) {
         cardBody.append(cardTitle, cardIcon, cardTemp, cardWind, cardHum);
         weatherCard.append(cardBody);
         weatherCards.append(weatherCard);
-
-        console.log(weatherCard);
     }
 }
 
@@ -206,17 +202,6 @@ function init () {
     loadCity();
     //Render the saved list of cities buttons
     renderCityList();
-
-    $('#mobileMenuButton').on('mousedown touchstart',function(){
-        var userAgent = window.navigator.userAgent;
-        if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i)||  userAgent.match(/Android/i)) {
-     if ($('#mobileNavigation').css('display') == 'none') {
-        $('#mobileNavigation').css('display','block');
-     } else {
-        $('#mobileNavigation').css('display','none'); 
-     }
-   }
-  });
 }
 
 //Wait for page to load and then initiate
