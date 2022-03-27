@@ -37,9 +37,7 @@ function handleFormClick (event) {
 
         if (searchString != "" && searchString != null && typeof searchString === "string") {
 
-
-            searchString = toProperCase(searchString);
-            searchApi(searchString);
+            searchApi(toProperCase(searchString));
             //Save city in searches
             saveCity(searchString);
         }
@@ -122,7 +120,7 @@ function renderCityList() {
         var keys = Object.keys(savedCities);
         for (var i = keys.length-1; i >= 0; i--) {
             btnElement = $("<button>").addClass("btn btn-secondary btn-block").attr("value",keys[i]);
-            btnElement.text(keys[i]);
+            btnElement.text(toProperCase(keys[i]));
             cityList.append(btnElement);
         }
         btnElement = $("<button>").addClass("btn btn-warning btn-block").attr("value","clear");
@@ -137,7 +135,7 @@ function saveCity(city) {
 
     if (city != "" || city != undefined) {
 
-        city = toProperCase(city);
+        city = city.toLowerCase();
 
         //Check if any stored cities. If not initialise object first.
         if (savedCities === null) {
@@ -174,13 +172,16 @@ function loadCity(city) {
             city = defaultCity;
         }
     }
+    city = toProperCase(city);
     searchApi(city);
 }
 
 function clearCities() {
 
-    localStorage.removeItem("weatherpro");
-    renderCityList();
+    if(confirm("Are you sure you wish to clear the list?")) {
+        localStorage.removeItem("weatherpro");
+        renderCityList();
+    }
 }
 
 //Helpers
