@@ -9,6 +9,7 @@
     --hr-colour:#a9a9a9;
     --border-colour: #000000;
     --wcard-bg-colour:#172b38;
+    --uvindex-colour:#ffffff;
 }
 
 html {
@@ -120,6 +121,11 @@ span {
     background-color: rgb(23, 43, 56);
 }
 
+.uvi {
+    font-size: 1rem;
+    min-width: 3rem;
+    color: var(--uvindex-colour);
+}
 
 @media only screen and (min-width: 768px) {
     /* Adjust the card width for larger screens */
