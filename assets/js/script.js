@@ -227,12 +227,9 @@ function toProperCase(str) {
 }
 
 function getLocation() {
-
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
-
             console.log(position);
-
         });
     } else {
         return false;
@@ -240,7 +237,6 @@ function getLocation() {
 }
 
 function init() {
-    getLocation();
     //Load weather for last city searched. If none, do default city.
     loadCity();
     //Render the saved list of cities buttons
