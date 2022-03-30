@@ -12,6 +12,7 @@ var uvi = $("#uvi");
 
 //Other Global vars
 var defaultCity = "sydney";
+var canSave = false;
 
 //Listeners
 formElement.on('click', 'button', handleFormClick);
@@ -36,49 +37,63 @@ function handleFormClick(event) {
         }
 
         if (searchString != "" && searchString != null && typeof searchString === "string") {
+            canSave = true;
             searchApi(toProperCase(searchString));
         }
     }
 }
 
 //API handler for openweather api - note default http changed to https
-function searchApi(searchString) {
+function searchApi(searchString, mode = 0, lat = "", lon = "") {
     var queryURL;
-    var success = "";
+
     //Call basic api response which also provides lat and lon for selected city
     queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + searchString + "&appid=" + APIKey;
-    fetch(queryURL).then(function (response) {
-        if (response.ok) {
-            response.json().then(function (baseData) {
-                //If all good, call the one call API with filters to remove unused data. Metric units selected
-                queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + baseData["coord"]["lat"] + "&lon=" + baseData["coord"]["lon"] + "&exclude=minutely,hourly&units=metric&appid=" + APIKey;
-                fetch(queryURL).then(function (response) {
-                    if (response.ok) {
-                        response.json().then(function (forecastData) {
-                            //Render the weather details for selected city
-                            renderWeather(searchString, forecastData);
-                            //Save city in searches
-                            saveCity(searchString);
-                            //Render saved city list
-                            renderCityList();
+    fetch(queryURL)
+        .then(function (response) {
+            if (response.ok) {
+                return response.json();
+            } else {
+                //Capture API error and alert user
+                alert("OpenWeather API error: " + response.statusText);
+                console.log(response);
+                return;
+            }
+        })
+        .then(function (baseData) {
+            if (mode != 1) {
+                lon = baseData["coord"]["lon"];
+                lat = baseData["coord"]["lat"];
+            }
+            //Call the one call API with filters to remove unused data. Metric units selected
+            if (lon != "" && lon != undefined && lat != "" && lat != undefined) {
+                queryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&units=metric&appid=" + APIKey;
+                fetch(queryURL)
+                    .then(function (response) {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            //Capture API error and alert user
+                            alert("OpenWeather API error: " + response.statusText);
+                            console.log(response);
+                            return;
+                        }
+                    })
+                    .then(function (forecastData) {
+                        console.log(forecastData);
+                        //Render the weather details for selected city
+                        renderWeather(searchString, forecastData);
+                        //Save city in searches
+                        saveCity(searchString);
+                        //Render saved city list
+                        renderCityList();
+                    });
 
-                        });
-                    } else {
-                        //Capture API error and alert user
-                        alert("OpenWeather API error: " + response.statusText);
-                        console.log(response);
-                        return;
-                    }
-                });
-            });
-        } else {
-            //Capture API error and alert user
-            alert("OpenWeather API error: " + response.statusText);
-            console.log(response);
-            return;
-        }
-    });
-}
+            } else {
+                alert("Miising lon and/or lat data. Check search string and try again.");
+            }
+        });
+};
 
 function renderWeather(searchString, forecastData) {
     var uvIndex;
@@ -155,10 +170,9 @@ function saveCity(city) {
 
     var savedCities = JSON.parse(localStorage.getItem("weatherpro"));
 
-    if (city != "" || city != undefined) {
+    if (city != "" && city != undefined && canSave === true) {
 
         city = city.toLowerCase();
-        // console.log(city);
 
         //Check if any stored cities. If not initialise object first.
         if (savedCities === null) {
@@ -178,6 +192,8 @@ function saveCity(city) {
 
         // set new entry to local storage 
         localStorage.setItem("weatherpro", JSON.stringify(savedCities));
+
+        canSave = false;
     }
 
     return true;
@@ -193,18 +209,21 @@ function loadCity(city) {
                 if (Object.hasOwnProperty.call(savedCities, key)) {
                     if (savedCities[key] === "last") {
                         city = key;
+                        city = toProperCase(city);
+                        searchApi(city);
+                        return true;
                     }
                 }
             }
         } else {
             city = defaultCity;
+            city = toProperCase(city);
+            searchApi(city);
         }
+    } else {
+        city = toProperCase(city);
+        searchApi(city);
     }
-    city = toProperCase(city);
-
-    searchApi(city);
-
-    return true;
 }
 
 //Clear local storage
@@ -226,21 +245,9 @@ function toProperCase(str) {
     });
 }
 
-function getLocation() {
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-
-            console.log(position);
-
-        });
-    } else {
-        return false;
-    }
-}
 
 function init() {
-    getLocation();
     //Load weather for last city searched. If none, do default city.
     loadCity();
     //Render the saved list of cities buttons
