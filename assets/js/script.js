@@ -43,7 +43,7 @@ function handleFormClick(event) {
     }
 }
 
-//API handler for openweather api - note default http changed to https
+//API handler for openweather api. Can take a place name, or lat and lon data- note default http changed to https
 function searchApi(searchString, mode = 0, lat = "", lon = "") {
     var queryURL;
 
